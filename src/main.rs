@@ -1,5 +1,9 @@
+#[allow(dead_code)]
+mod util;
+
+use crate::util::{Event, Events};
 use std::{error::Error, io};
-use termion::{input::MouseTerminal, raw::IntoRawMode, screen::AlternateScreen};
+use termion::{event::Key, input::MouseTerminal, raw::IntoRawMode, screen::AlternateScreen};
 use tui::{
     backend::TermionBackend,
     Terminal,
@@ -14,7 +18,20 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut terminal = Terminal::new(backend)?;
     terminal.hide_cursor()?;
 
+    // Setup event handlers
+    let events = Events::new();
+
     println!("Hello, world!");
 
+    loop {
+        terminal.draw(|mut f| {
+            // TODO: Terminal drawing
+        })?;
+        if let Event::Input(key) = events.next()? {
+            if key == Key::Char('q') {
+                break;
+            }
+        }
+    }
     Ok(())
 }
