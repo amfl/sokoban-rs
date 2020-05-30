@@ -6,6 +6,7 @@ use std::{error::Error, io};
 use termion::{event::Key, input::MouseTerminal, raw::IntoRawMode, screen::AlternateScreen};
 use tui::{
     backend::TermionBackend,
+    widgets::{Block, BorderType, Borders},
     Terminal,
 };
 
@@ -21,11 +22,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Setup event handlers
     let events = Events::new();
 
-    println!("Hello, world!");
-
     loop {
         terminal.draw(|mut f| {
-            // TODO: Terminal drawing
+            // Wrapping block for a group
+            // Just draw the block and the group on the same area and build the group
+            // with at least a margin of 1
+            let size = f.size();
+            let block = Block::default()
+                .borders(Borders::ALL)
+                .title("Main block with round corners")
+                .border_type(BorderType::Rounded);
+            f.render_widget(block, size);
         })?;
         if let Event::Input(key) = events.next()? {
             if key == Key::Char('q') {
