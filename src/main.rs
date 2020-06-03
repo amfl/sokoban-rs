@@ -6,6 +6,8 @@ use std::{error::Error, io};
 use termion::{event::Key, input::MouseTerminal, raw::IntoRawMode, screen::AlternateScreen};
 use tui::{
     backend::TermionBackend,
+    layout::{Constraint, Direction, Layout},
+    style::{Color, Style},
     widgets::{Block, BorderType, Borders},
     Terminal,
 };
@@ -33,6 +35,21 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .title("Main block with round corners")
                 .border_type(BorderType::Rounded);
             f.render_widget(block, size);
+
+            let chunks = Layout::default()
+                .direction(Direction::Vertical)
+                .margin(2)
+                .constraints([Constraint::Percentage(50), Constraint::Percentage(50)].as_ref())
+                .split(f.size());
+            {
+                let block = Block::default()
+                    .title("With background")
+                    .title_style(Style::default().fg(Color::Yellow))
+                    .style(Style::default().bg(Color::Green));
+                // Render this widget twice
+                f.render_widget(block, chunks[0]);
+                f.render_widget(block, chunks[1]);
+            }
         })?;
         if let Event::Input(key) = events.next()? {
             if key == Key::Char('q') {
