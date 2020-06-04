@@ -8,7 +8,10 @@ use tui::{
     backend::TermionBackend,
     layout::{Constraint, Direction, Layout},
     style::{Color, Style},
-    widgets::{Block, BorderType, Borders},
+    widgets::{
+        canvas::{Canvas},
+        Block, BorderType, Borders
+    },
     Terminal,
 };
 
@@ -48,7 +51,16 @@ fn main() -> Result<(), Box<dyn Error>> {
                     .style(Style::default().bg(Color::Green));
                 // Render this widget twice
                 f.render_widget(block, chunks[0]);
-                f.render_widget(block, chunks[1]);
+            }
+            {
+                let canvas = Canvas::default()
+                    .block(Block::default().borders(Borders::ALL).title("World"))
+                    .paint(|ctx| {
+                        ctx.print(0.0, 0.0, "You are here", Color::Yellow);
+                    })
+                    .x_bounds([0.0, 20.0])
+                    .y_bounds([0.0, 20.0]);
+                f.render_widget(canvas, chunks[1]);
             }
         })?;
         if let Event::Input(key) = events.next()? {
