@@ -1,13 +1,15 @@
 #[allow(dead_code)]
 mod util;
+mod my_widget;
 
 use crate::util::{Event, Events};
+use crate::my_widget::MyWidget;
 use std::{error::Error, io};
 use termion::{event::Key, input::MouseTerminal, raw::IntoRawMode, screen::AlternateScreen};
 use tui::{
     backend::TermionBackend,
     layout::{Constraint, Direction, Layout},
-    style::{Color, Style},
+    style::{Color},
     widgets::{
         canvas::{Canvas},
         Block, BorderType, Borders
@@ -44,13 +46,17 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .margin(2)
                 .constraints([Constraint::Percentage(50), Constraint::Percentage(50)].as_ref())
                 .split(f.size());
+            // {
+            //     let block = Block::default()
+            //         .title("With background")
+            //         .title_style(Style::default().fg(Color::Yellow))
+            //         .style(Style::default().bg(Color::Green));
+            //     // Render this widget twice
+            //     f.render_widget(block, chunks[0]);
+            // }
             {
-                let block = Block::default()
-                    .title("With background")
-                    .title_style(Style::default().fg(Color::Yellow))
-                    .style(Style::default().bg(Color::Green));
-                // Render this widget twice
-                f.render_widget(block, chunks[0]);
+                let myw = MyWidget::default().text("Sup");
+                f.render_widget(myw, chunks[0]);
             }
             {
                 let canvas = Canvas::default()
