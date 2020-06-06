@@ -1,9 +1,11 @@
 #[allow(dead_code)]
 mod util;
 mod my_widget;
+mod app_state;
 
 use crate::util::{Event, Events};
 use crate::my_widget::MyWidget;
+use crate::app_state::AppState;
 use std::{error::Error, io};
 use termion::{event::Key, input::MouseTerminal, raw::IntoRawMode, screen::AlternateScreen};
 use tui::{
@@ -28,6 +30,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Setup event handlers
     let events = Events::new();
+
+    let state = AppState{ x: 8, y: 3 };
 
     loop {
         terminal.draw(|mut f| {
@@ -55,7 +59,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             //     f.render_widget(block, chunks[0]);
             // }
             {
-                let myw = MyWidget::default().text("Sup");
+                let myw = MyWidget{ state: &state };
                 f.render_widget(myw, chunks[0]);
             }
             {
