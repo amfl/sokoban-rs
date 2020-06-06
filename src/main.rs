@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Setup event handlers
     let events = Events::new();
 
-    let state = AppState{ x: 8, y: 3 };
+    let mut state = AppState{ x: 8, y: 3 };
 
     loop {
         terminal.draw(|mut f| {
@@ -73,11 +73,22 @@ fn main() -> Result<(), Box<dyn Error>> {
                 f.render_widget(canvas, chunks[1]);
             }
         })?;
-        if let Event::Input(key) = events.next()? {
-            if key == Key::Char('q') {
-                break;
+        match events.next()? {
+            Event::Input(input) => match input {
+                Key::Char('q') => {
+                    break;
+                }
+                Key::Down  => { state.y += 1; }
+                Key::Up    => { state.y -= 1; }
+                Key::Right => { state.x += 1; }
+                Key::Left  => { state.x -= 1; }
+                _ => {}
+            },
+            Event::Tick => {
+                // state.update();
             }
         }
+
     }
     Ok(())
 }
