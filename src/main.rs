@@ -11,9 +11,9 @@ use termion::{event::Key, input::MouseTerminal, raw::IntoRawMode, screen::Altern
 use tui::{
     backend::TermionBackend,
     layout::{Constraint, Direction, Layout},
-    style::{Color},
+    // style::{Color},
     widgets::{
-        canvas::{Canvas},
+        // canvas::{Canvas},
         Block, BorderType, Borders
     },
     Terminal,
@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Setup event handlers
     let events = Events::new();
 
-    let mut state = AppState{ x: 8, y: 3 };
+    let mut state = AppState::default();
 
     loop {
         terminal.draw(|mut f| {
@@ -62,26 +62,26 @@ fn main() -> Result<(), Box<dyn Error>> {
                 let myw = MyWidget{ state: &state };
                 f.render_widget(myw, chunks[0]);
             }
-            {
-                let canvas = Canvas::default()
-                    .block(Block::default().borders(Borders::ALL).title("World"))
-                    .paint(|ctx| {
-                        ctx.print(0.0, 0.0, "You are here", Color::Yellow);
-                    })
-                    .x_bounds([0.0, 20.0])
-                    .y_bounds([0.0, 20.0]);
-                f.render_widget(canvas, chunks[1]);
-            }
+            // {
+            //     let canvas = Canvas::default()
+            //         .block(Block::default().borders(Borders::ALL).title("World"))
+            //         .paint(|ctx| {
+            //             ctx.print(0.0, 0.0, "You are here", Color::Yellow);
+            //         })
+            //         .x_bounds([0.0, 20.0])
+            //         .y_bounds([0.0, 20.0]);
+            //     f.render_widget(canvas, chunks[1]);
+            // }
         })?;
         match events.next()? {
             Event::Input(input) => match input {
                 Key::Char('q') => {
                     break;
                 }
-                Key::Down  => { state.y += 1; }
-                Key::Up    => { state.y -= 1; }
-                Key::Right => { state.x += 1; }
-                Key::Left  => { state.x -= 1; }
+                // Key::Down  => { state.y += 1; }
+                // Key::Up    => { state.y -= 1; }
+                // Key::Right => { state.x += 1; }
+                // Key::Left  => { state.x -= 1; }
                 _ => {}
             },
             Event::Tick => {
