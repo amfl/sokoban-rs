@@ -47,8 +47,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
             let chunks = Layout::default()
                 .direction(Direction::Vertical)
-                .margin(2)
-                .constraints([Constraint::Percentage(50), Constraint::Percentage(50)].as_ref())
+                .margin(1)
+                .constraints([Constraint::Percentage(100)].as_ref())
                 .split(f.size());
             // {
             //     let block = Block::default()
