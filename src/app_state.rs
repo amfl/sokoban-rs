@@ -10,12 +10,14 @@ pub enum Tile {
 pub struct AppState {
     pub w: u16,
     pub h: u16,
+    pub view_center_x: u16,
+    pub view_center_y: u16,
     data: Vec<Tile>,
 }
 
 impl Default for AppState {
     fn default() -> AppState {
-        AppState::new(8,8)
+        AppState::new(16,16)
     }
 }
 impl AppState {
@@ -35,6 +37,8 @@ impl AppState {
         AppState{
             w: w,
             h: h,
+            view_center_x: w/2,
+            view_center_y: h/2,
             // data: vec![Tile::Floor; (w*h) as usize],
             data: v,
         }

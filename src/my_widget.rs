@@ -15,17 +15,26 @@ pub struct MyWidget<'a> {
 
 impl<'a> Widget for MyWidget<'a> {
     fn render(self, area: Rect, buf: &mut Buffer) {
-        for i in 0..self.state.w {
-            for j in 0..self.state.h {
-                let t = match self.state.get(i,j) {
-                    Tile::Wall => "#",
-                    Tile::Crate => "o",
-                    _ => " ",
+        // print!("rendering in area: {}x{} {}x{}", area.x, area.y,
+        //        area.width, area.height);
+        let offset_x = (self.state.view_center_x as i16) - ((area.width / 2) as i16);
+        let offset_y = (self.state.view_center_y as i16) - ((area.height / 2) as i16);
+        for i in 0..area.width {
+            for j in 0..area.height {
+                let ix = (i as i16) + offset_x;
+                let jy = (j as i16) + offset_y;
+                let glyph = if ix < 0 || jy < 0 || ix >= self.state.w as i16 || jy >= self.state.h as i16 {
+                    "?"
+                } else {
+                    match self.state.get(ix as u16, jy as u16) {
+                        Tile::Wall => "#",
+                        Tile::Crate => "o",
+                        _ => " ",
+                    }
                 };
-                buf.set_string(area.left() + i, area.top() + j, t, Style::default());
+                buf.set_string(area.left() + i, area.top() + j, glyph, Style::default());
             }
         }
-        buf.set_string(area.left() + self.state.w, area.top() + self.state.h, "X", Style::default());
     }
 }
 
