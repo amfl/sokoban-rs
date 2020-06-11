@@ -17,8 +17,8 @@ impl<'a> Widget for MyWidget<'a> {
     fn render(self, area: Rect, buf: &mut Buffer) {
         // print!("rendering in area: {}x{} {}x{}", area.x, area.y,
         //        area.width, area.height);
-        let offset_x = (self.state.view_center_x as i16) - ((area.width / 2) as i16);
-        let offset_y = (self.state.view_center_y as i16) - ((area.height / 2) as i16);
+        let offset_x = self.state.view_center_x - (area.width as i16) / 2;
+        let offset_y = self.state.view_center_y - (area.height as i16) / 2;
         for i in 0..area.width {
             for j in 0..area.height {
                 let ix = (i as i16) + offset_x;
@@ -26,7 +26,7 @@ impl<'a> Widget for MyWidget<'a> {
                 let glyph = if ix < 0 || jy < 0 || ix >= self.state.w as i16 || jy >= self.state.h as i16 {
                     "?"
                 } else {
-                    match self.state.get(ix as u16, jy as u16) {
+                    match self.state.get(ix, jy) {
                         Tile::Wall => "#",
                         Tile::Crate => "o",
                         _ => " ",

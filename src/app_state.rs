@@ -8,10 +8,10 @@ pub enum Tile {
     Floor,
 }
 pub struct AppState {
-    pub w: u16,
-    pub h: u16,
-    pub view_center_x: u16,
-    pub view_center_y: u16,
+    pub w: i16,
+    pub h: i16,
+    pub view_center_x: i16,
+    pub view_center_y: i16,
     data: Vec<Tile>,
 }
 
@@ -21,7 +21,7 @@ impl Default for AppState {
     }
 }
 impl AppState {
-    pub fn new(w: u16, h: u16) -> AppState {
+    pub fn new(w: i16, h: i16) -> AppState {
         let mut v = Vec::default();
 
         // Populate with entirely random data
@@ -43,7 +43,7 @@ impl AppState {
             data: v,
         }
     }
-    pub fn get(&self, x: u16, y: u16) -> &Tile {
+    pub fn get(&self, x: i16, y: i16) -> &Tile {
         let k = y*self.w + x;
         &self.data[k as usize]
     }
