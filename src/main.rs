@@ -78,10 +78,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                 Key::Char('q') => {
                     break;
                 }
-                // Key::Down  => { state.y += 1; }
-                // Key::Up    => { state.y -= 1; }
-                // Key::Right => { state.x += 1; }
-                // Key::Left  => { state.x -= 1; }
+                Key::Down  => { state.view_center_y += 1; }
+                Key::Up    => { state.view_center_y -= 1; }
+                Key::Right => { state.view_center_x += 1; }
+                Key::Left  => { state.view_center_x -= 1; }
                 _ => {}
             },
             Event::Tick => {
