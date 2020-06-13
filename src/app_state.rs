@@ -12,6 +12,8 @@ pub struct AppState {
     pub h: i16,
     pub view_center_x: i16,
     pub view_center_y: i16,
+    pub player_x: i16,
+    pub player_y: i16,
     data: Vec<Tile>,
 }
 
@@ -37,6 +39,8 @@ impl AppState {
         AppState{
             w: w,
             h: h,
+            player_x: w/2,
+            player_y: h/2,
             view_center_x: w/2,
             view_center_y: h/2,
             // data: vec![Tile::Floor; (w*h) as usize],

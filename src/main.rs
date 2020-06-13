@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Setup event handlers
     let events = Events::new();
 
-    let mut state = AppState::default();
+    let mut state = AppState::new(64,64);
 
     loop {
         terminal.draw(|mut f| {
@@ -82,6 +82,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                 Key::Up    => { state.view_center_y -= 1; }
                 Key::Right => { state.view_center_x += 1; }
                 Key::Left  => { state.view_center_x -= 1; }
+                Key::Char('s') => { state.player_y += 1; }
+                Key::Char('w') => { state.player_y -= 1; }
+                Key::Char('d') => { state.player_x += 1; }
+                Key::Char('a') => { state.player_x -= 1; }
                 _ => {}
             },
             Event::Tick => {

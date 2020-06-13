@@ -24,7 +24,7 @@ impl<'a> Widget for MyWidget<'a> {
                 let ix = (i as i16) + offset_x;
                 let jy = (j as i16) + offset_y;
                 let glyph = if ix < 0 || jy < 0 || ix >= self.state.w as i16 || jy >= self.state.h as i16 {
-                    "?"
+                    "."
                 } else {
                     match self.state.get(ix, jy) {
                         Tile::Wall => "#",
@@ -34,6 +34,17 @@ impl<'a> Widget for MyWidget<'a> {
                 };
                 buf.set_string(area.left() + i, area.top() + j, glyph, Style::default());
             }
+        }
+
+        // Draw the player
+        let proj_x = self.state.player_x - offset_x;
+        let proj_y = self.state.player_y - offset_y;
+        if proj_x >= 0 || proj_x < self.state.w ||
+                proj_y >= 0 || proj_y < self.state.h {
+            buf.set_string(
+                area.left() + (proj_x as u16),
+                area.top() + (proj_y as u16),
+                "@", Style::default());
         }
     }
 }
