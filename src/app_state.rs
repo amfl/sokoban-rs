@@ -1,6 +1,6 @@
 use rand::{thread_rng, Rng};
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum Tile {
     Wall,
     Crate,
@@ -47,8 +47,41 @@ impl AppState {
             data: v,
         }
     }
+
     pub fn get(&self, x: i16, y: i16) -> &Tile {
         let k = y*self.w + x;
         &self.data[k as usize]
+    }
+
+    pub fn get_mut(&mut self, x: i16, y: i16) -> &mut Tile {
+        let k = y*self.w + x;
+        &mut self.data[k as usize]
+    }
+
+    // Returns true if the player actually moved
+    pub fn player_move(&mut self, dx: i16, dy: i16) -> bool {
+        let px = self.player_x;
+        let py = self.player_y;
+        let dest = self.get(px + dx, py + dy);
+        let target = self.get(px + 2*dx, py + 2*dy);
+
+        if *dest == Tile::Floor ||
+           (*dest == Tile::Crate && *target == Tile::Floor)
+        {
+            if *dest == Tile::Crate {
+                {
+                    let mut d = self.get_mut(px + dx, py + dy);
+                    *d = Tile::Floor;
+                }
+                {
+                    let mut t = self.get_mut(px + 2*dx, py + 2*dy);
+                    *t = Tile::Crate;
+                }
+            }
+            self.player_x += dx;
+            self.player_y += dy;
+        }
+
+        true
     }
 }
