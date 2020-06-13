@@ -20,6 +20,9 @@ use tui::{
 };
 
 fn main() -> Result<(), Box<dyn Error>> {
+    let mut state = AppState::new(64,64);
+    state.load_level("maps.json", 0);
+
     // Terminal initialization
     let stdout = io::stdout().into_raw_mode()?;
     let stdout = MouseTerminal::from(stdout);
@@ -30,8 +33,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Setup event handlers
     let events = Events::new();
-
-    let mut state = AppState::new(64,64);
 
     loop {
         terminal.draw(|mut f| {

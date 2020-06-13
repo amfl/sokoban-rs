@@ -27,8 +27,14 @@ impl<'a> Widget for MyWidget<'a> {
                     "."
                 } else {
                     match self.state.get(ix, jy) {
+                        Tile::Empty => " ",
                         Tile::Wall => "#",
+                        Tile::Floor => " ",
+                        Tile::Target => "x",
                         Tile::Crate => "o",
+                        Tile::CrateOnTarget => "O",
+                        Tile::Player => "p",
+                        Tile::PlayerOnTarget => "p",
                         _ => " ",
                     }
                 };

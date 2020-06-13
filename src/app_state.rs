@@ -1,12 +1,20 @@
 use rand::{thread_rng, Rng};
+use std::fs::File;
+use std::io::prelude::*;
+use serde_json::{Result, Value};
 
 #[derive(Clone, PartialEq)]
 pub enum Tile {
+    Empty,
     Wall,
-    Crate,
-    Player,
     Floor,
+    Target,
+    Crate,
+    CrateOnTarget,
+    Player,
+    PlayerOnTarget,
 }
+
 pub struct AppState {
     pub w: i16,
     pub h: i16,
@@ -22,6 +30,7 @@ impl Default for AppState {
         AppState::new(16,16)
     }
 }
+
 impl AppState {
     pub fn new(w: i16, h: i16) -> AppState {
         let mut v = Vec::default();
@@ -83,5 +92,53 @@ impl AppState {
         }
 
         true
+    }
+
+    pub fn load_level(&mut self, filename: &str, level: usize) -> std::io::Result<()> {
+        let mut file = File::open(filename)?;
+        let mut data = String::new();
+        file.read_to_string(&mut data)?;
+
+        // Parse the string of data into serde_json::Value.
+        let v: Vec<Vec<Vec<u8>>> = serde_json::from_str(&data)?;
+
+        let level_data = &v[level];
+
+        let mut new_level = Vec::<Tile>::default();
+
+        self.w = level_data[0].len() as i16;
+        self.h = level_data.len() as i16;
+        self.player_x = self.w / 2;
+        self.player_y = self.h / 2;
+        self.view_center_x = self.w / 2;
+        self.view_center_y = self.h / 2;
+
+        for (y, row) in level_data.iter().enumerate() {
+           for (x, cell) in row.iter().enumerate() {
+                new_level.push(match cell {
+                    0 => Tile::Empty,
+                    1 => Tile::Wall,
+                    2 => Tile::Floor,
+                    3 => Tile::Target,
+                    4 => Tile::Crate,
+                    5 => Tile::CrateOnTarget,
+                    6 => {
+                        self.player_x = x as i16;
+                        self.player_y = y as i16;
+                        Tile::Player
+                    }
+                    7 => {
+                        self.player_x = x as i16;
+                        self.player_y = y as i16;
+                        Tile::PlayerOnTarget
+                    }
+                    _ => Tile::Empty,
+                });
+           }
+        }
+
+        self.data = new_level;
+
+        Ok(())
     }
 }
