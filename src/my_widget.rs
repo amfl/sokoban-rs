@@ -30,9 +30,9 @@ impl<'a> Widget for MyWidget<'a> {
                         Tile::Empty => (" ", Style::default()),
                         Tile::Wall => ("#", Style::default().bg(Color::Gray)),
                         Tile::Floor => (" ", Style::default()),
-                        Tile::Target => ("x", Style::default().fg(Color::Magenta)),
-                        Tile::Crate => ("o", Style::default().bg(Color::Yellow)),
-                        Tile::CrateOnTarget => ("O", Style::default().bg(Color::Cyan)),
+                        Tile::Target => (".", Style::default().fg(Color::Green)),
+                        Tile::Crate => ("X", Style::default().bg(Color::Magenta)),
+                        Tile::CrateOnTarget => ("O", Style::default().bg(Color::Blue)),
                         Tile::Player => ("p", Style::default()),
                         Tile::PlayerOnTarget => ("p", Style::default()),
                         _ => (" ", Style::default()),
@@ -51,7 +51,7 @@ impl<'a> Widget for MyWidget<'a> {
             buf.set_string(
                 area.left() + (proj_x as u16),
                 area.top() + (proj_y as u16),
-                "@", Style::default().fg(Color::Cyan));
+                "@", Style::default().fg(Color::Yellow));
         }
     }
 }
