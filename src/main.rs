@@ -40,9 +40,10 @@ fn main() -> Result<(), Box<dyn Error>> {
             // Just draw the block and the group on the same area and build the group
             // with at least a margin of 1
             let size = f.size();
+            let title = format!("Sokoban [{}]", state.level_no + 1);
             let block = Block::default()
                 .borders(Borders::ALL)
-                .title("Sokoban")
+                .title(&title)
                 .border_type(BorderType::Rounded);
             f.render_widget(block, size);
 
