@@ -16,6 +16,7 @@ pub enum Tile {
 }
 
 pub struct AppState {
+    pub level_no: i16,
     pub w: i16,
     pub h: i16,
     pub view_center_x: i16,
@@ -46,6 +47,7 @@ impl AppState {
             v.push(t);
         }
         AppState{
+            level_no: -1,
             w: w,
             h: h,
             player_x: w/2,
@@ -123,6 +125,7 @@ impl AppState {
 
         let mut new_level = Vec::<Tile>::default();
 
+        self.level_no = level as i16;
         self.w = level_data[0].len() as i16;
         self.h = level_data.len() as i16;
         self.player_x = self.w / 2;
