@@ -1,6 +1,8 @@
 # Sokoban
 
-The classic "warehouse keeper" keeper game from Japan :)
+The classic "warehouse keeper" keeper game from Japan.
+
+Written for fun, code is not clean or good. Don't judge me, please! :)
 
 ## Controls
 
