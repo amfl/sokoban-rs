@@ -42,7 +42,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             let size = f.size();
             let block = Block::default()
                 .borders(Borders::ALL)
-                .title("Main block with round corners")
+                .title("Sokoban")
                 .border_type(BorderType::Rounded);
             f.render_widget(block, size);
 
