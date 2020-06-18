@@ -89,6 +89,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 Key::Char('a') => { state.player_move(-1, 0); }
                 Key::Char('n') => { state.load_level("maps.json", (state.level_no + 1) as usize); }
                 Key::Char('p') => { state.load_level("maps.json", (state.level_no - 1) as usize); }
+                Key::Char('r') => { state.load_level("maps.json", state.level_no as usize); }
                 _ => {}
             },
             Event::Tick => {
