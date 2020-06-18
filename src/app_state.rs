@@ -142,12 +142,12 @@ impl AppState {
                     6 => {
                         self.player_x = x as i16;
                         self.player_y = y as i16;
-                        Tile::Player
+                        Tile::Floor
                     }
                     7 => {
                         self.player_x = x as i16;
                         self.player_y = y as i16;
-                        Tile::PlayerOnTarget
+                        Tile::Target
                     }
                     _ => Tile::Empty,
                 });
