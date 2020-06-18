@@ -62,35 +62,52 @@ impl AppState {
         &self.data[k as usize]
     }
 
+    pub fn get2(&self, (x, y): (i16, i16)) -> &Tile {
+        self.get(x, y)
+    }
+
     pub fn get_mut(&mut self, x: i16, y: i16) -> &mut Tile {
         let k = y*self.w + x;
         &mut self.data[k as usize]
     }
 
+    pub fn set(&mut self, (x, y): (i16, i16), t: Tile) {
+        let k = y*self.w + x;
+        self.data[k as usize] = t;
+    }
+
     // Returns true if the player actually moved
     pub fn player_move(&mut self, dx: i16, dy: i16) -> bool {
-        let px = self.player_x;
-        let py = self.player_y;
-        let dest = self.get(px + dx, py + dy);
-        let target = self.get(px + 2*dx, py + 2*dy);
+        // save coords for quick access
+        // let px = self.player_x;
+        // let py = self.player_y;
+        let coord_player = (self.player_x,      self.player_y);
+        let coord_dest   = (self.player_x+dx,   self.player_y+dy);
+        let coord_target = (self.player_x+2*dx, self.player_y+2*dy);
 
-        if *dest == Tile::Floor ||
-           (*dest == Tile::Crate && *target == Tile::Floor)
-        {
-            if *dest == Tile::Crate {
-                {
-                    let mut d = self.get_mut(px + dx, py + dy);
-                    *d = Tile::Floor;
-                }
-                {
-                    let mut t = self.get_mut(px + 2*dx, py + 2*dy);
-                    *t = Tile::Crate;
-                }
-            }
-            self.player_x += dx;
-            self.player_y += dy;
+        let dest = self.get2(coord_dest);
+        let target = self.get2(coord_target);
+
+        if *dest == Tile::Floor || *dest == Tile::Target {
+            // Woo, move
+        } else if (*dest == Tile::Crate && *target == Tile::Floor) {
+            self.set(coord_dest, Tile::Floor);
+            self.set(coord_target, Tile::Crate);
+        } else if (*dest == Tile::Crate && *target == Tile::Target) {
+            self.set(coord_dest, Tile::Floor);
+            self.set(coord_target, Tile::CrateOnTarget);
+        } else if (*dest == Tile::CrateOnTarget && *target == Tile::Floor) {
+            self.set(coord_dest, Tile::Target);
+            self.set(coord_target, Tile::Crate);
+        } else if (*dest == Tile::CrateOnTarget && *target == Tile::Target) {
+            self.set(coord_dest, Tile::Target);
+            self.set(coord_target, Tile::CrateOnTarget);
+        } else {
+            return false
         }
 
+        self.player_x += dx;
+        self.player_y += dy;
         true
     }
 
