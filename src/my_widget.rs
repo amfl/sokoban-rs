@@ -2,7 +2,7 @@ use tui::{
     buffer::Buffer,
     layout::Rect,
     widgets::Widget,
-    style::Style,
+    style::{Style, Color},
 };
 use crate::app_state::{
     AppState,
@@ -23,22 +23,23 @@ impl<'a> Widget for MyWidget<'a> {
             for j in 0..area.height {
                 let ix = (i as i16) + offset_x;
                 let jy = (j as i16) + offset_y;
-                let glyph = if ix < 0 || jy < 0 || ix >= self.state.w as i16 || jy >= self.state.h as i16 {
-                    "."
+                let tile = if ix < 0 || jy < 0 || ix >= self.state.w as i16 || jy >= self.state.h as i16 {
+                    (" ", Style::default())
                 } else {
                     match self.state.get(ix, jy) {
-                        Tile::Empty => " ",
-                        Tile::Wall => "#",
-                        Tile::Floor => " ",
-                        Tile::Target => "x",
-                        Tile::Crate => "o",
-                        Tile::CrateOnTarget => "O",
-                        Tile::Player => "p",
-                        Tile::PlayerOnTarget => "p",
-                        _ => " ",
+                        Tile::Empty => (" ", Style::default()),
+                        Tile::Wall => ("#", Style::default().bg(Color::Gray)),
+                        Tile::Floor => (" ", Style::default()),
+                        Tile::Target => ("x", Style::default().fg(Color::Magenta)),
+                        Tile::Crate => ("o", Style::default().bg(Color::Yellow)),
+                        Tile::CrateOnTarget => ("O", Style::default().bg(Color::Cyan)),
+                        Tile::Player => ("p", Style::default()),
+                        Tile::PlayerOnTarget => ("p", Style::default()),
+                        _ => (" ", Style::default()),
                     }
                 };
-                buf.set_string(area.left() + i, area.top() + j, glyph, Style::default());
+                let (glyph, style) = tile;
+                buf.set_string(area.left() + i, area.top() + j, glyph, style);
             }
         }
 
@@ -50,7 +51,7 @@ impl<'a> Widget for MyWidget<'a> {
             buf.set_string(
                 area.left() + (proj_x as u16),
                 area.top() + (proj_y as u16),
-                "@", Style::default());
+                "@", Style::default().fg(Color::Cyan));
         }
     }
 }
