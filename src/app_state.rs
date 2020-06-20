@@ -1,7 +1,6 @@
 use rand::{thread_rng, Rng};
 use std::fs::File;
 use std::io::prelude::*;
-use serde_json::{Result, Value};
 
 #[derive(Clone, PartialEq)]
 pub enum Tile {
@@ -11,8 +10,6 @@ pub enum Tile {
     Target,
     Crate,
     CrateOnTarget,
-    Player,
-    PlayerOnTarget,
 }
 
 pub struct AppState {
@@ -38,7 +35,7 @@ impl AppState {
 
         // Populate with entirely random data
         let mut rng = thread_rng();
-        for i in 0..(w*h) {
+        for _ in 0..(w*h) {
             let t = match rng.gen_range(0, 3) {
                 0 => Tile::Wall,
                 1 => Tile::Crate,
@@ -74,7 +71,7 @@ impl AppState {
         // save coords for quick access
         // let px = self.player_x;
         // let py = self.player_y;
-        let coord_player = (self.player_x,      self.player_y);
+        // let coord_player = (self.player_x,      self.player_y);
         let coord_dest   = (self.player_x+dx,   self.player_y+dy);
         let coord_target = (self.player_x+2*dx, self.player_y+2*dy);
 
@@ -83,16 +80,16 @@ impl AppState {
 
         if *dest == Tile::Floor || *dest == Tile::Target {
             // Woo, move
-        } else if (*dest == Tile::Crate && *target == Tile::Floor) {
+        } else if *dest == Tile::Crate && *target == Tile::Floor {
             self.set(coord_dest, Tile::Floor);
             self.set(coord_target, Tile::Crate);
-        } else if (*dest == Tile::Crate && *target == Tile::Target) {
+        } else if *dest == Tile::Crate && *target == Tile::Target {
             self.set(coord_dest, Tile::Floor);
             self.set(coord_target, Tile::CrateOnTarget);
-        } else if (*dest == Tile::CrateOnTarget && *target == Tile::Floor) {
+        } else if *dest == Tile::CrateOnTarget && *target == Tile::Floor {
             self.set(coord_dest, Tile::Target);
             self.set(coord_target, Tile::Crate);
-        } else if (*dest == Tile::CrateOnTarget && *target == Tile::Target) {
+        } else if *dest == Tile::CrateOnTarget && *target == Tile::Target {
             self.set(coord_dest, Tile::Target);
             self.set(coord_target, Tile::CrateOnTarget);
         } else {

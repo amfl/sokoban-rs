@@ -33,9 +33,6 @@ impl<'a> Widget for MyWidget<'a> {
                         Tile::Target => (".", Style::default().fg(Color::Green)),
                         Tile::Crate => ("X", Style::default().bg(Color::Magenta)),
                         Tile::CrateOnTarget => ("O", Style::default().bg(Color::Blue)),
-                        Tile::Player => ("p", Style::default()),
-                        Tile::PlayerOnTarget => ("p", Style::default()),
-                        _ => (" ", Style::default()),
                     }
                 };
                 let (glyph, style) = tile;
