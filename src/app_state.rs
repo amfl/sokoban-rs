@@ -59,18 +59,9 @@ impl AppState {
         }
     }
 
-    pub fn get(&self, x: i16, y: i16) -> &Tile {
+    pub fn get(&self, (x, y): (i16, i16)) -> &Tile {
         let k = y*self.w + x;
         &self.data[k as usize]
-    }
-
-    pub fn get2(&self, (x, y): (i16, i16)) -> &Tile {
-        self.get(x, y)
-    }
-
-    pub fn get_mut(&mut self, x: i16, y: i16) -> &mut Tile {
-        let k = y*self.w + x;
-        &mut self.data[k as usize]
     }
 
     pub fn set(&mut self, (x, y): (i16, i16), t: Tile) {
@@ -87,8 +78,8 @@ impl AppState {
         let coord_dest   = (self.player_x+dx,   self.player_y+dy);
         let coord_target = (self.player_x+2*dx, self.player_y+2*dy);
 
-        let dest = self.get2(coord_dest);
-        let target = self.get2(coord_target);
+        let dest = self.get(coord_dest);
+        let target = self.get(coord_target);
 
         if *dest == Tile::Floor || *dest == Tile::Target {
             // Woo, move

@@ -26,7 +26,7 @@ impl<'a> Widget for MyWidget<'a> {
                 let tile = if ix < 0 || jy < 0 || ix >= self.state.w as i16 || jy >= self.state.h as i16 {
                     (" ", Style::default())
                 } else {
-                    match self.state.get(ix, jy) {
+                    match self.state.get((ix, jy)) {
                         Tile::Empty => (" ", Style::default()),
                         Tile::Wall => ("#", Style::default().bg(Color::Gray)),
                         Tile::Floor => (" ", Style::default()),
